@@ -11,10 +11,11 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import mainthread
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
+import os
 
 ############################## Default Window ###############################
 Config.set('graphics', 'resizable', 0)
-Config.set('kivy', 'window_icon', 'data/logo/window-icon.png')
+Config.set('kivy', 'window_icon', os.path.join(os.getcwd(),"logo", "window-icon.png"))
 Config.write()
 #############################################################################
 
@@ -22,7 +23,6 @@ import glob
 import cv2
 import numpy as np
 # import tesserocr
-import os
 import re
 import pytesseract
 from pytesseract import Output
@@ -54,7 +54,7 @@ ScreenManager:
     name: 'starter'
     id: first
     Image:
-        source: 'data/logo/opening.gif'
+        source: 'logo/opening.gif'
         size: self.texture_size
         anim_delay: 0.1
         mipmap: True
@@ -117,7 +117,7 @@ class MenuScreen(Screen):
         self.progress_bar.value = 10
 
         self.popup.open()
-        print(self.progress_bar.value)
+        # print(self.progress_bar.value)
 
     @mainthread
     def update_progress_bar(self, val, _):
@@ -151,7 +151,7 @@ class MenuScreen(Screen):
     def process_some_data(self):
         ########################## PDF to Image ###############################
 
-        output_dir = os.path.join(os.getcwd(), 'src', 'temp_images')
+        # output_dir = os.path.join(os.getcwd(), 'src', 'temp_images')
 
         if self.req_data.get("status"):
             pdf_list = self.req_data.get("pdf_file_list")
@@ -165,18 +165,13 @@ class MenuScreen(Screen):
                     # print(pdf_file, count)
                     images = convert_from_path(pdf_file, 400, size=2000, poppler_path=poppler_dir)
                     for image in images:
-                        fname = os.path.join(output_dir, str(count) + ".png")
-                        image.save(fname, "PNG")
+                        # fname = os.path.join(output_dir, str(count) + ".png")
+                        # image.save(fname, "PNG")
 
-            # total_images_list = glob.glob(os.path.join(output_dir, "*.png"))
         ##############################################################################
-            # img_list = total_images_list
                         next_counter = count
-                    # for img_path in img_list:
-                    #     original_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
                         original = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-                        # original = cv2.imread(original_image)
 
                         if original.shape[1] > original.shape[0]:
                             end_point = (original.shape[1], original.shape[0])  # 2000, 1422
@@ -233,7 +228,7 @@ class MenuScreen(Screen):
                                         # print(number, original_image)
 
                                         file_name = number[0].replace(".", "_")
-                                        final_output_file = os.path.join("OUTPUT", file_name + ".pdf")
+                                        final_output_file = os.path.join(os.getcwd(), "OUTPUT", file_name + ".pdf")
                                         # cv2.imwrite(final_output_file, original)
                                         # shutil.move(pdf_file, final_output_file)
                                         shutil.copy2(pdf_file, final_output_file)
