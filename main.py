@@ -11,7 +11,8 @@ from kivymd.uix.dialog import MDDialog
 from kivy.clock import mainthread
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
-import os
+import os, sys
+from kivy.resources import resource_add_path, resource_find
 
 ############################## Default Window ###############################
 Config.set('graphics', 'resizable', 0)
@@ -310,6 +311,9 @@ def reset():
 
 
 if __name__ == '__main__':
+    if hasattr(sys, '_MEIPASS'):
+        resource_add_path(os.path.join(sys._MEIPASS))
+
     reset()
     app = MyPDFApp()
     app.run()
